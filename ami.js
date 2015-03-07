@@ -14,7 +14,11 @@ function ami(modules, mainFunc) {
                 mainFunc.call(null, context);
             } else {
                 var thisModule = currentModule++;
-                modules[thisModule].init.call(null, context, next);
+                if(modules[thisModule].init === undefined) {
+                    throw new Error('init() does not exist');
+                } else {
+                    modules[thisModule].init.call(null, context, next);
+                }
             }
         }
     // bootstrap

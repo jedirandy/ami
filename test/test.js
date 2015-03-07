@@ -4,7 +4,7 @@ var assert = require("assert");
 describe('test ami', function() {
     it('should have 2 properties', function(done) {
         ami([{
-            init: function (context, next) {
+            init: function(context, next) {
                 context.name = 'hello';
                 (function() {
                     next();
@@ -12,12 +12,12 @@ describe('test ami', function() {
             }
         }, {
             init: function(context, next) {
-                context.name2 = 'apc';
+                context.tag = 'world';
                 next();
             }
         }], function(context) {
             assert.equal(context.name, 'hello');
-            assert.equal(context.name2, 'apc');
+            assert.equal(context.tag, 'world');
             done();
         });
     });
@@ -37,6 +37,16 @@ describe('test ami', function() {
     it('passing invalid mainFunc throws an error', function() {
         assert.throws(function() {
             ami([], {});
+        }, Error);
+    });
+
+    it('passing module witout init() throws an error', function() {
+        assert.throws(function() {
+            ami([
+                    {
+                        nop: function(){}
+                    }
+                ], function(){});
         }, Error);
     });
 });
